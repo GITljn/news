@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljn.mapper.NewsMapper">
+    <sql id="allColumns">
+        title,
+        img,
+        introduction,
+        content,
+        `release`,
+        `create`
+    </sql>
+
+    <insert id="insertNews">
+        insert into news(
+            title,
+            img,
+            introduction,
+            content,
+            `create`
+        )
+        values(
+            #{title},
+            #{img},
+            #{introduction},
+            #{content},
+            #{create}
+        )
+    </insert>
+
+    <delete id="deleteNews">
+        delete from news where id = #{id}
+    </delete>
+
+    <update id="updateNews">
+        update news set
+        title = #{title},
+        img = #{img},
+        introduction = #{introduction},
+        content = #{content}
+        where id = #{id}
+    </update>
+
+    <select id="selectNews" resultType="com.ljn.entity.News">
+        select <include refid="allColumns"></include>
+        from news
+        where id = #{id}
+    </select>
+
+    <select id="selectNewsByPage" resultType="com.ljn.entity.News">
+        select <include refid="allColumns"></include>
+        from news
+        order by `create` desc
+        limit #{start}, #{size}
+    </select>
+
+    <delete id="deleteNewsBatch">
+        delete from news where id in
+        <foreach collection="array" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
